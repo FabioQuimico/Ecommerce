@@ -18,6 +18,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity	
 @Table(name = "cliente")
 public class Cliente implements Serializable {
@@ -41,9 +43,11 @@ public class Cliente implements Serializable {
 	@Column(nullable = false)
 	public Date dataNascimento; 
 	
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "cliente")
 	private Set<Endereco> enderecos = new LinkedHashSet<Endereco>();	
 	
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "cliente")
 	private Set<Pedido> pedidos = new LinkedHashSet<Pedido>();
 	
@@ -69,7 +73,7 @@ public class Cliente implements Serializable {
 	}
 	
 	
-	/*@Override
+	@Override
 	public String toString() {
 		return "\\nCliente [codigo=" + codigo + 
 			   "\\nNome=" + nome + 
@@ -78,7 +82,7 @@ public class Cliente implements Serializable {
 			   "\\nData de Nascimento=" + dataNascimento + 
 			   "\\nEnderecos=" + enderecos + 
 			   "\\nPedidos=" + pedidos + "]";
-	}*/
+	}
 
 	public Integer getCodigo() {
 		return codigo;
@@ -120,19 +124,19 @@ public class Cliente implements Serializable {
 		this.dataNascimento = dataNascimento;
 	}
 	
-//	public Set<Endereco> getEnderecos() {
-//		return enderecos;
-//	}
-//
-//	public void setEnderecos(Set<Endereco> enderecos) {
-//		this.enderecos = enderecos;
-//	}
+	public Set<Endereco> getEnderecos() {
+		return enderecos;
+	}
 
-//	public Set<Pedido> getPedidos() {
-//		return pedidos;
-//	}
-//	public void setPedidos(Set<Pedido> pedidos) {
-//		this.pedidos = pedidos;
-//	}	
+	public void setEnderecos(Set<Endereco> enderecos) {
+		this.enderecos = enderecos;
+	}
+
+	public Set<Pedido> getPedidos() {
+		return pedidos;
+	}
+	public void setPedidos(Set<Pedido> pedidos) {
+		this.pedidos = pedidos;
+	}	
 
 }

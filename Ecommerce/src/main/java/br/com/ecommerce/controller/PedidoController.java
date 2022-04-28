@@ -46,7 +46,7 @@ public class PedidoController {
 		return new ResponseEntity<Pedido>(pedido, HttpStatus.OK);
 	}
 	
-	@GetMapping("pedido")
+	@GetMapping("pedido/{nome}")
 	public ResponseEntity<List<Pedido>> getPedidoByCliente(@RequestParam("nome") Cliente cliente) {
 		List<Pedido> listaPedidos = pedidoService.getPedidoByCliente(cliente);
 		return new ResponseEntity<List<Pedido>>(listaPedidos, HttpStatus.OK);

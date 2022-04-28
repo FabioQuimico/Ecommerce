@@ -15,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity	
 public class Produto implements Serializable {
 
@@ -34,6 +36,7 @@ public class Produto implements Serializable {
 	@Column(nullable = false)
 	public Integer quantidade_estoque; 
 	
+	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "produto")
 	private Set<ItemPedido> itemPedidos = new HashSet<>();
 	
@@ -51,13 +54,13 @@ public class Produto implements Serializable {
 	public Integer getCodigo() {
 		return this.codigo;
 	}
-//	public Set<ItemPedido> getItemPedidos() {
-//		return itemPedidos;
-//	}
-//
-//	public void setItemPedidos(Set<ItemPedido> itemPedidos) {
-//		this.itemPedidos = itemPedidos;
-//	}
+	public Set<ItemPedido> getItemPedidos() {
+		return itemPedidos;
+	}
+
+	public void setItemPedidos(ItemPedido itemPedido) {
+		this.itemPedidos.add(itemPedido) ;
+	}
 
 	public String getNome() {
 		return nome;

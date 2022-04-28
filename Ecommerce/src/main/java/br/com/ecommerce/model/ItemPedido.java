@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="ITEM_PEDIDO")
 public class ItemPedido implements Serializable {
@@ -20,10 +22,12 @@ public class ItemPedido implements Serializable {
 	@EmbeddedId
 	private ItemPedidoPK itemPedidoPK;
 	
+	//@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "codigoProduto",referencedColumnName = "codigo", insertable = false, updatable = false)
 	private Produto produto;
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "codigoPedido", referencedColumnName = "codigo", insertable = false, updatable = false)
 	private Pedido pedido;
@@ -52,8 +56,8 @@ public class ItemPedido implements Serializable {
 	public Produto getProduto() {
 		return produto;
 	}
-	public void setProduto(Produto produtos) {
-		this.produto = produtos;
+	public void setProduto(Produto produto) {
+		produto.setItemPedidos(this); 
 		this.produto.getItemPedidos().add(this);
 	}
 	public Pedido getPedido() {

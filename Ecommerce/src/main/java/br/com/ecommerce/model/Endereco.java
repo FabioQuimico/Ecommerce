@@ -15,6 +15,8 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="Endereco")
 public class Endereco implements Serializable{
@@ -39,11 +41,12 @@ public class Endereco implements Serializable{
 	private String cep;
     private EstadoEndereco estadoEndereco; 
     
-    @MapsId("codCliente")
+    @JsonIgnore
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "codCliente", referencedColumnName = "codigo", insertable = false, updatable = false)
     private Cliente cliente;
     
+    @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "endereco_entrega")
     private Set<Pedido> pedidos = new HashSet<>();
     

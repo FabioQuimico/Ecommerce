@@ -1,7 +1,9 @@
 package br.com.ecommerce.model;
 
+
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -20,7 +22,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 
 
@@ -34,7 +36,6 @@ public class Pedido implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer codigo;
-	@Temporal(value = TemporalType.TIMESTAMP)
 	private Date data_pedido;
 	private BigDecimal valor_total;
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -54,15 +55,14 @@ public class Pedido implements Serializable {
 	public Pedido() {
 		
 	}
-	public Pedido(Integer codigo, Date data_pedido, BigDecimal valor_total, Cliente cliente,
-			Endereco endereco_entrega, Set<ItemPedido> itemPedido, EstadoPedido estado) {
+	public Pedido(Integer codigo, Date data_pedido, Cliente cliente,Endereco endereco_entrega, Set<ItemPedido> itemPedido, EstadoPedido estado) {
 		super();
 		this.codigo = codigo;
 		this.data_pedido = data_pedido;
-		this.valor_total = valor_total;
 		setCliente(cliente);
 		setEndereco_entrega(endereco_entrega);
-		setItemPedido(itemPedido);
+//		itemPedido.forEach(item -> setItemPedido(item));
+		itemPedido.forEach(item -> adicionarItem(item));
 		this.estado = estado;
 	}
 
@@ -89,11 +89,11 @@ public class Pedido implements Serializable {
 	public void setValor_total(BigDecimal valor_total) {
 		this.valor_total = valor_total;
 	}
-	@JsonIgnore
+
 	public Cliente getCliente() {
 		return cliente;
 	}
-	@JsonIgnore
+
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
@@ -106,14 +106,6 @@ public class Pedido implements Serializable {
 		this.endereco_entrega = endereco_entrega;
 	}
 
-//	public Set<ItemPedido> getItemPedido() {
-//		return itemPedido;
-//	}
-//
-//	public void setItemPedido(Set<ItemPedido> itemPedido) {
-//		this.itemPedido = itemPedido;
-//	}
-
 	public EstadoPedido getEstado() {
 		return estado;
 	}
@@ -121,6 +113,22 @@ public class Pedido implements Serializable {
 	public void setEstado(EstadoPedido estado) {
 		this.estado = estado;
 	}
+	
+	public void adicionarItem(ItemPedido item) {
+		setItemPedido(item);
+		BigDecimal quantidade = new BigDecimal(item.getQuantidade());
+		this.valor_total = this.valor_total.add(item.getValor().multiply(quantidade));
+	}
+
+	public void setItemPedido(ItemPedido itemPedidos) {
+		this.itemPedido.add(itemPedidos); 
+		itemPedidos.setPedido(this);
+	}
+	public Set<ItemPedido> getItemPedido() {
+		return itemPedido;
+	}
+	
+	
 	
 	
 	
