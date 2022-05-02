@@ -2,7 +2,7 @@ package br.com.ecommerce.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -36,11 +36,11 @@ public class Cliente implements Serializable {
 	@Column(unique = true, nullable = false, length = 11)
 	public String cpf;
 	
-	@Column(nullable = false)
+	@Column(nullable = true)
 	public String email;
 	
 	@Temporal(value = TemporalType.TIMESTAMP)
-	@Column(nullable = false)
+	@Column(nullable = true)
 	public Date dataNascimento; 
 	
 	@JsonIgnore

@@ -42,8 +42,8 @@ public class ProdutoService implements IProdutoService {
 	}
 
 	@Override
-	@Caching(put = { @CachePut(value = "produtoCache", key = "#produto.codigo") }, evict = {
-			@CacheEvict(value = "allProdutosCache", allEntries = true) })
+//	@Caching(put = { @CachePut(value = "produtoCache", key = "#produto.codigo") }, evict = {
+//			@CacheEvict(value = "allProdutosCache", allEntries = true) })
 	public Produto addProduto(Produto produto) {
 		System.out.println("addProduto()");
 		return produtoRepository.save(produto);

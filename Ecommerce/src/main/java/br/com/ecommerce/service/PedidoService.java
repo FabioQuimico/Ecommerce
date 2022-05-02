@@ -10,7 +10,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Component;
 
-import br.com.ecommerce.model.Cliente;
 import br.com.ecommerce.model.EstadoPedido;
 import br.com.ecommerce.model.Pedido;
 import br.com.ecommerce.repository.PedidoRepository;
@@ -31,15 +30,15 @@ public class PedidoService implements IPedidoService{
 	}
 
 	@Override
-	@Cacheable(value = "pedidoCache", key = "#codigo")
+//	@Cacheable(value = "pedidoCache", key = "#codigo")
 	public Pedido getPedidoByCodigo(Integer codigo) {
 		System.out.println("getPedidoByCodigo()");
 		return pedidoRepository.findById(codigo).get();
 	}
 
 	@Override
-	@Caching(put = { @CachePut(value = "pedidoCache", key = "#pedido.codigo") }, evict = {
-			@CacheEvict(value = "allPedidosCache", allEntries = true) })
+//	@Caching(put = { @CachePut(value = "pedidoCache", key = "#pedido.codigo") }, evict = {
+//			@CacheEvict(value = "allPedidosCache", allEntries = true) })
 	public Pedido addPedido(Pedido pedido) {
 		System.out.println("addPedido()");
 		return pedidoRepository.save(pedido);
