@@ -86,9 +86,9 @@ public class ItemPedidoController {
 	@PostMapping("itempedido")
 	public ResponseEntity<Void> addItemPedido(@RequestBody ItemPedido itemPedido, UriComponentsBuilder builder) {
 		try {
-			ItemPedido novoItemPedido = itemPedidoService.updateItemPedido(itemPedido);
+			ItemPedido novoItemPedido = itemPedidoService.addItemPedido(itemPedido);
 			HttpHeaders headers = new HttpHeaders();
-			headers.setLocation(builder.path("/endereco/" + novoItemPedido.getCodigoItemPedidoPK()).buildAndExpand().toUri());
+			headers.setLocation(builder.path("/itempedido/" + novoItemPedido.getCodigoItemPedidoPK()).buildAndExpand().toUri());
 			return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 		} catch (DataIntegrityViolationException | HttpMessageNotReadableException e) {
 			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);

@@ -41,14 +41,9 @@ public class Cliente implements Serializable {
 	@Column(nullable = false)
 	public Date dataNascimento; 
 	
-	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name="codigo_cliente_fk")
 	private Set<Endereco> enderecos = new LinkedHashSet<Endereco>();	
-	
-	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	//@JoinColumn(name = "codigo_cliente_fk")
-//	private Set<Pedido> pedidos = new LinkedHashSet<Pedido>();
 	
 		
 	public Cliente() {

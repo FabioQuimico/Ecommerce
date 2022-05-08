@@ -12,5 +12,5 @@ public interface IProdutoService {
 	Produto addProduto(Produto produto);
 	Produto updateProduto(Produto produto);
 	void deleteProduto(Integer codigo);
-	
+	void deleteAllProdutos();	
 }

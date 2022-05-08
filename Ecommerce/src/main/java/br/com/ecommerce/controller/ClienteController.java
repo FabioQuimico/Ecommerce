@@ -22,14 +22,13 @@ public class ClienteController {
 	private IClienteService clienteService;
 	
 	@PostMapping("cliente")
-	public ResponseEntity<Void> addEndereco(
-			@RequestBody Cliente cliente, 
-			UriComponentsBuilder builder) {
-		Cliente cli = clienteService.addCliente(cliente);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(builder.path("/cliente/"+cli.getCodigo()).buildAndExpand().toUri());
-		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
-	}
+	public ResponseEntity<Void> addCliente(@RequestBody Cliente cliente, UriComponentsBuilder builder) {
+		Cliente savedCliente = clienteService.addCliente(cliente);  
+                HttpHeaders headers = new HttpHeaders();
+                headers.setLocation(builder.path("/cliente/{id}").buildAndExpand(savedCliente.codigo).toUri());
+                return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	}		
+		
 	
 //	@GetMapping("clientes/all")
 //	public ResponseEntity<List<ClienteDTO>> getAllEnderecos() {

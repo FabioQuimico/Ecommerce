@@ -25,6 +25,12 @@ public class ItemPedidoService implements IItemPedidoService {
 		itemPedidoRepository.findAll().forEach(itemPedido -> listaItemPedidos.add(itemPedido));
 		return listaItemPedidos;
 	}
+	
+	@Override
+	@Transactional
+	public ItemPedido addItemPedido(ItemPedido itemPedido) {
+		return itemPedidoRepository.save(itemPedido);
+	}	
 
 	@Override
 	@Transactional(readOnly = true)

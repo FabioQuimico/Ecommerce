@@ -36,8 +36,16 @@ public class ItemPedido implements Serializable {
 	
 	// Construtores
 	public ItemPedido() {};
+	
 	public ItemPedido(Produto produto, Pedido pedido, Integer quantidade) {
 		this.valor = produto.getPreco();
+		setQuantidade(quantidade);
+	}
+	
+	public ItemPedido(Integer codigo, Produto produto, Integer quantidade) {
+		this.codigoItemPedidoPK = codigo;
+		setProduto(produto);
+		setValor(produto.getPreco());
 		setQuantidade(quantidade);
 	}
 	
@@ -45,7 +53,6 @@ public class ItemPedido implements Serializable {
 	public Integer getCodigoItemPedidoPK() {
 		return codigoItemPedidoPK;
 	}
-	
 	
 	public int getQuantidade() {
 		return quantidade;

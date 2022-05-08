@@ -102,4 +102,10 @@ public class ProdutoController {
 		}
 	}
 
+//	@DeleteMapping("produto")
+//	public ResponseEntity<Void> deleteAllProdutos() {
+//		produtoService.deleteAllProdutos();
+//		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+//		
+//	}	
 }

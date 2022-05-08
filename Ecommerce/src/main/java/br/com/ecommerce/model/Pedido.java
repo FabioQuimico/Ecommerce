@@ -56,6 +56,15 @@ public class Pedido implements Serializable {
 		itemPedido.forEach(item -> adicionarItem(item));
 		this.estado = estado;
 	}
+	
+	public Pedido(Integer codigo, Date data_pedido, EstadoPedido estado, Cliente cliente ) {
+		super();
+		this.codigo = codigo;
+		this.data_pedido = data_pedido;
+		this.estado = estado;
+		this.cliente = cliente;
+		this.valor_total = new BigDecimal("1");
+	}	
 
 	public Integer getCodigo() {
 		return codigo;
@@ -94,6 +103,11 @@ public class Pedido implements Serializable {
 		this.valor_total = this.valor_total.add(item.getValor().multiply(quantidade));
 	}
 	
+	public void adicionarItem(Integer codigo, Produto produto, int quantidade) {		
+		ItemPedido item = new ItemPedido(codigo, produto, quantidade);
+		this.itemPedidos.add(item);		
+		this.valor_total = this.valor_total.add(item.getValor().multiply(new BigDecimal(quantidade)));
+	}
 	
 	public Set<ItemPedido> getItemPedidos() {
 		return itemPedidos;
@@ -115,6 +129,17 @@ public class Pedido implements Serializable {
 	}
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
+	}
+	
+	@Override
+	public String toString() {
+		return "\\nPedido [codigo=" + codigo + 
+			   "\\nData_pedido=" + data_pedido + 
+			   "\\nValor_total=" + valor_total +
+			   "\\nCliente=" + cliente + 
+			   "\\nEnderecoEntrega=" + enderecoEntrega + 
+			   "\\nitemPedido=" + itemPedidos +
+			   "\\nEstado=" + estado + "]";
 	}
 }
 
