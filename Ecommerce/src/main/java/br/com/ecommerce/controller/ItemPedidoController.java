@@ -35,7 +35,7 @@ public class ItemPedidoController {
 	private IItemPedidoService itemPedidoService;
 	
 	// List All
-	@GetMapping("itempedidos")
+	@GetMapping("itenspedido")
 	@ApiOperation(value = "Retorna todos os ItemPedidos cadastrados")
 	public ResponseEntity<List<ItemPedido>> getAllItemPedidos(){
 		try {
@@ -44,33 +44,9 @@ public class ItemPedidoController {
 		} catch (NoSuchElementException e) {
 			return new ResponseEntity<List<ItemPedido>>(HttpStatus.NOT_FOUND);
 		}
-	}
+	}	
 	
-//	// List Todos item-pedidos por codigo de produto
-//	@GetMapping("itempedidosporproduto/{codigoProduto}")
-//	@ApiOperation(value = "Retorna todos os ItemPedidos de um produto")
-//	public ResponseEntity<List<ItemPedido>> findByCodigoProduto(@PathVariable("codigoProduto") Integer codigoProduto){
-//		try {
-//			List<ItemPedido> listaItemPedidos = itemPedidoService.findByCodigoProdutoPK(codigoProduto);
-//			return new ResponseEntity<List<ItemPedido>>(listaItemPedidos, HttpStatus.OK);
-//		} catch (NoSuchElementException e) {
-//			return new ResponseEntity<List<ItemPedido>>(HttpStatus.NOT_FOUND);
-//		}
-//	}
-//	
-//	// List Todos item-pedidos por codigo de pedido
-//	@GetMapping("itempedidosporpedido/{codigoPedido}")
-//	@ApiOperation(value = "Retorna todos os ItemPedidos de um pedido")
-//	public ResponseEntity<List<ItemPedido>> findByCodigoPedido(@PathVariable("codigoPedido") Integer codigoPedido){
-//		try {
-//			List<ItemPedido> listaItemPedidos = itemPedidoService.findByCodigoPedidoPK(codigoPedido);
-//			return new ResponseEntity<List<ItemPedido>>(listaItemPedidos, HttpStatus.OK);
-//		} catch (NoSuchElementException e) {
-//			return new ResponseEntity<List<ItemPedido>>(HttpStatus.NOT_FOUND);
-//		}
-//	}
-	
-	// Select 1
+
 	@GetMapping("itempedido/{codigoItemPedido}")
 	@ApiOperation(value = "Retorna um ItemPedido único pelo codigo")
 	public ResponseEntity<ItemPedido> findByCodigoItemPedidoPK(@PathVariable("codigoItemPedido") Integer codigoItemPedidoPK) {
@@ -86,9 +62,9 @@ public class ItemPedidoController {
 	@PostMapping("itempedido")
 	public ResponseEntity<Void> addItemPedido(@RequestBody ItemPedido itemPedido, UriComponentsBuilder builder) {
 		try {
-			ItemPedido novoItemPedido = itemPedidoService.addItemPedido(itemPedido);
+			ItemPedido novoItem = itemPedidoService.addItemPedido(itemPedido);
 			HttpHeaders headers = new HttpHeaders();
-			headers.setLocation(builder.path("/itempedido/" + novoItemPedido.getCodigoItemPedidoPK()).buildAndExpand().toUri());
+			headers.setLocation(builder.path("/itempedido/{codigo}").buildAndExpand(novoItem.getCodigoItemPedidoPK()).toUri());
 			return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 		} catch (DataIntegrityViolationException | HttpMessageNotReadableException e) {
 			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);

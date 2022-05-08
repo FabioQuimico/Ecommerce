@@ -31,8 +31,12 @@ public class ItemPedido implements Serializable {
 	private BigDecimal valor;
 
 	@ManyToOne(optional=false)
-	@JoinColumn(name = "codig_produto_FK",referencedColumnName = "codigo", nullable=false)
+	@JoinColumn(name = "codigo_produto_FK",referencedColumnName = "codigo", nullable=true)
 	private Produto produto;
+	
+	@ManyToOne()
+	@JoinColumn(name = "codigo_pedido_FK",referencedColumnName = "codigo", nullable=true)
+    private Pedido pedido;
 	
 	// Construtores
 	public ItemPedido() {};
@@ -42,9 +46,10 @@ public class ItemPedido implements Serializable {
 		setQuantidade(quantidade);
 	}
 	
-	public ItemPedido(Integer codigo, Produto produto, Integer quantidade) {
+	public ItemPedido(Integer codigo, Produto produto, Pedido pedido, Integer quantidade) {
 		this.codigoItemPedidoPK = codigo;
 		setProduto(produto);
+		setPedido(pedido);
 		setValor(produto.getPreco());
 		setQuantidade(quantidade);
 	}
@@ -71,13 +76,6 @@ public class ItemPedido implements Serializable {
 		this.valor = valor;
 	}	
 	
-	@Override
-	public String toString() {
-	return "\nItemPedido (codigo: " + codigoItemPedidoPK +
-			", Quantidade: " + this.getQuantidade() + 
-			", Valor: " + this.getValor() + ")";
-	}
-	
 	public Produto getProduto() {
 		return produto;
 	}
@@ -85,4 +83,19 @@ public class ItemPedido implements Serializable {
 	public void setProduto(Produto produto) {
 		this.produto = produto;
 	}
+
+	public Pedido getPedido() {
+		return pedido;
+	}
+
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
+	}		
+	
+	@Override
+	public String toString() {
+	return "\nItemPedido (codigo: " + codigoItemPedidoPK +
+			", Quantidade: " + this.getQuantidade() + 
+			", Valor: " + this.getValor() + ")";
+	}	
 }

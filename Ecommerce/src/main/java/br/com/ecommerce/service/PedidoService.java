@@ -44,8 +44,8 @@ public class PedidoService implements IPedidoService{
 	}
 
 	@Override
-	@Caching(put = { @CachePut(value = "pedidoCache", key = "#pedido.codigo") }, evict = {
-			@CacheEvict(value = "allPedidosCache", allEntries = true) })	
+//	@Caching(put = { @CachePut(value = "pedidoCache", key = "#pedido.codigo") }, evict = {
+//			@CacheEvict(value = "allPedidosCache", allEntries = true) })	
 	public Pedido updatePedido(Pedido pedido) {
 		System.out.println("updatePedido()");
 		return pedidoRepository.save(pedido);

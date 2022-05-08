@@ -43,7 +43,7 @@ public class EcommerceUtil {
 		System.out.println(uri.getPath());
 	}	
 	
-	public void addItemPedidooDemo(ItemPedido itemPedido) {
+	public void addItemPedidoDemo(ItemPedido itemPedido) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		RestTemplate restTemplate = new RestTemplate();
@@ -97,6 +97,59 @@ public class EcommerceUtil {
 		System.out.println(produto);
 	}
 	
+	public void updatePedidoDemo(Pedido pedido) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		RestTemplate restTemplate = new RestTemplate();
+		String url = "http://localhost:8080/ecommerce/pedido";
+		HttpEntity<Pedido> requestEntity = new HttpEntity<Pedido>(pedido, headers);
+		restTemplate.put(url, requestEntity);
+	}	
+	
+	public void getAllItensDemo() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		RestTemplate restTemplate = new RestTemplate();
+		String url = "http://localhost:8080/ecommerce/itenspedido";
+		HttpEntity<String> requestEntity = new HttpEntity<String>(headers);
+		ResponseEntity<ItemPedido[]> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity,
+				ItemPedido[].class);
+		ItemPedido[] itens = responseEntity.getBody();
+		for (ItemPedido item : itens) {
+			System.out.println(item);
+		}
+	}	
+	
+	public void getItemByIdDemo(Integer id) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		RestTemplate restTemplate = new RestTemplate();
+		String url = "http://localhost:8080/ecommerce/itempedido/{codigoItemPedido}";
+		HttpEntity<String> requestEntity = new HttpEntity<String>(headers);
+		ResponseEntity<ItemPedido> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity,
+				ItemPedido.class, id);
+		ItemPedido item = responseEntity.getBody();
+		System.out.println(item);
+	}	
+	
+	public void updateItemDemo(ItemPedido item) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		RestTemplate restTemplate = new RestTemplate();
+		String url = "http://localhost:8080/ecommerce/itempedido";
+		HttpEntity<ItemPedido> requestEntity = new HttpEntity<ItemPedido>(item, headers);
+		restTemplate.put(url, requestEntity);
+	}	
+	
+	public void deleteItemDemo(long id) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		RestTemplate restTemplate = new RestTemplate();
+		String url = "http://localhost:8080/spring-app/estoque/produto/{id}";
+		HttpEntity<Produto> requestEntity = new HttpEntity<Produto>(headers);
+		restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, Void.class, id);
+	}	
+	
 //	public void deleteAllProdutosDemo() {
 //		HttpHeaders headers = new HttpHeaders();
 //		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -114,6 +167,7 @@ public class EcommerceUtil {
 //		util.deleteAllProdutosDemo();		
 		
 //      Grava produtos oferecidos pela loja	
+		System.out.println("Grava produtos");	
 		
 		Produto produto1 = new Produto(1, "Notebook", new BigDecimal("8000.00"), 25);
 		System.out.println(produto1.toString());
@@ -136,6 +190,7 @@ public class EcommerceUtil {
 		util.addProdutoDemo(produto5);
 	
 //      Grava cliente
+		System.out.println("Grava cliente");		
 		
 		SimpleDateFormat data = new SimpleDateFormat("dd.MM.yyyy");
 		Date dtNascimento = data.parse("27.02.1956");
@@ -143,29 +198,49 @@ public class EcommerceUtil {
 		System.out.println(cliente.toString());
 		util.addClienteDemo(cliente);						
 		
-//      Grava pedido (carrinho de compras) de cliente não identificado
+//      Grava pedido (carrinho de compras) 
+		System.out.println("Grava pedido");
 		
 		Pedido pedido1 = new Pedido(1, new Date(), EstadoPedido.EM_ANDAMENTO, cliente);
 		System.out.println(pedido1.toString());
 		util.addPedidoDemo(pedido1);	
 		
 //      Adiciona produtos ao carrinho
+		System.out.println("Adiciona produtos ao carrinho");
+		 		
+		System.out.println("Adiciona produto 1");
+		ItemPedido item1 = new ItemPedido(1, produto1, pedido1, 1);
+		util.addItemPedidoDemo(item1);
+		pedido1.adicionarItem(item1);
+		System.out.println("Atualiza valor pedido");
+		util.updatePedidoDemo(pedido1);
+		util.getPedidoByIdDemo(1);		
+				
+		System.out.println("Adiciona produto 2");
+		ItemPedido item2 = new ItemPedido(2, produto2, pedido1, 2);
+		util.addItemPedidoDemo(item2);
+		pedido1.adicionarItem(item2);
+		System.out.println("Atualiza valor pedido");		
+		util.updatePedidoDemo(pedido1);		
+		util.getPedidoByIdDemo(1);
 		
-		pedido1.adicionarItem(1, produto1, 1);
-		
-		pedido1.adicionarItem(2, produto2, 1);
-		
-		pedido1.adicionarItem(3, produto5, 1);
-		
-		pedido1.getItemPedidos().forEach((item) -> {
-			System.out.println(item.toString());
-			util.addItemPedidooDemo(item);
-		});		
-		
-		util.getPedidoByIdDemo(1);	
+		System.out.println("Adiciona produto 5");				
+		ItemPedido item3 = new ItemPedido(3, produto5, pedido1, 1);
+		util.addItemPedidoDemo(item3);
+		pedido1.adicionarItem(item3);	
+		System.out.println("Atualiza valor pedido");		
+		util.updatePedidoDemo(pedido1);
+		util.getPedidoByIdDemo(1);
+					
+		System.out.println("Consulta objeto pedido");			
 		System.out.println(pedido1.toString());
 		
-
+//      Alterar o item
+		util.getItemByIdDemo(item2.getCodigoItemPedidoPK());		
+		System.out.println("Altera quantidade do item");					
+		item2.setQuantidade(1);
+		util.updateItemDemo(item2);
+		util.getItemByIdDemo(item2.getCodigoItemPedidoPK());
 
 	}
 }

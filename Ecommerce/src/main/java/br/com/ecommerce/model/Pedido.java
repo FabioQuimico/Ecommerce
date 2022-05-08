@@ -3,6 +3,7 @@ package br.com.ecommerce.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -19,6 +20,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "pedidos")
 public class Pedido implements Serializable {
@@ -31,8 +34,8 @@ public class Pedido implements Serializable {
 	private Date data_pedido;
 	private BigDecimal valor_total;
 	
-	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
-	@JoinColumn(name = "codigoPedido_FK")
+	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER, mappedBy = "pedido")
+	@JsonIgnore
 	private Set<ItemPedido> itemPedidos = new LinkedHashSet<ItemPedido>();
 	
 	@OneToOne(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
@@ -52,7 +55,6 @@ public class Pedido implements Serializable {
 		super();
 		this.codigo = codigo;
 		this.data_pedido = data_pedido;
-		this.setItemPedidos(itemPedido);
 		itemPedido.forEach(item -> adicionarItem(item));
 		this.estado = estado;
 	}
@@ -99,22 +101,14 @@ public class Pedido implements Serializable {
 	}
 	
 	public void adicionarItem(ItemPedido item) {
+		this.itemPedidos.add(item);
+		item.setPedido(this);
 		BigDecimal quantidade = new BigDecimal(item.getQuantidade());
 		this.valor_total = this.valor_total.add(item.getValor().multiply(quantidade));
 	}
 	
-	public void adicionarItem(Integer codigo, Produto produto, int quantidade) {		
-		ItemPedido item = new ItemPedido(codigo, produto, quantidade);
-		this.itemPedidos.add(item);		
-		this.valor_total = this.valor_total.add(item.getValor().multiply(new BigDecimal(quantidade)));
-	}
-	
 	public Set<ItemPedido> getItemPedidos() {
-		return itemPedidos;
-	}
-	
-	public void setItemPedidos(Set<ItemPedido> itemPedido) {
-		this.itemPedidos = itemPedido;
+		return Collections.unmodifiableSet(this.itemPedidos);
 	}
 	
 	public Endereco getEnderecoEntrega() {

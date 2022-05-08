@@ -27,13 +27,13 @@ public class ItemPedidoService implements IItemPedidoService {
 	}
 	
 	@Override
-	@Transactional
+//	@Transactional
 	public ItemPedido addItemPedido(ItemPedido itemPedido) {
 		return itemPedidoRepository.save(itemPedido);
 	}	
 
 	@Override
-	@Transactional(readOnly = true)
+//	@Transactional(readOnly = true)
 	public ItemPedido findByCodigoItemPedidoPK(Integer codigoItemPedidoPK) {
 		return itemPedidoRepository.findByCodigoItemPedidoPK(codigoItemPedidoPK);
 	}
