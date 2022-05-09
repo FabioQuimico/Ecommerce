@@ -22,7 +22,7 @@ public class ItemPedido implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ITEMPEDIDO")
 	@SequenceGenerator(name="SEQ_ITEMPEDIDO", sequenceName = "ItemPedido_Seq", allocationSize=1)
-	private Integer codigoItemPedidoPK;
+	private int codigoItemPedidoPK;
 	
 	@Column(nullable = false)
 	private int quantidade;
@@ -30,7 +30,7 @@ public class ItemPedido implements Serializable {
 	@Column(nullable = false, precision = 7, scale = 2)
 	private BigDecimal valor;
 
-	@ManyToOne(optional=false)
+	@ManyToOne()
 	@JoinColumn(name = "codigo_produto_FK",referencedColumnName = "codigo", nullable=true)
 	private Produto produto;
 	
@@ -41,31 +41,35 @@ public class ItemPedido implements Serializable {
 	// Construtores
 	public ItemPedido() {};
 	
-	public ItemPedido(Produto produto, Pedido pedido, Integer quantidade) {
+	public ItemPedido(Produto produto, Pedido pedido, int quantidade) {
 		this.valor = produto.getPreco();
-		setQuantidade(quantidade);
+		this.setQuantidade(quantidade);
 	}
 	
-	public ItemPedido(Integer codigo, Produto produto, Pedido pedido, Integer quantidade) {
+	public ItemPedido(int codigo, Produto produto, Pedido pedido, int quantidade) {
 		this.codigoItemPedidoPK = codigo;
-		setProduto(produto);
-		setPedido(pedido);
-		setValor(produto.getPreco());
-		setQuantidade(quantidade);
+		this.setProduto(produto);
+		this.setPedido(pedido);
+		this.setValor(produto.getPreco().multiply(new BigDecimal(quantidade)));
+		this.setQuantidade(quantidade);
+	}
+	
+	public void atualizarQtdeItens(int quantidade) {
+		this.setValor(this.produto.getPreco().multiply(new BigDecimal(quantidade)));
+		this.setQuantidade(quantidade);
 	}
 	
 	// Getters and Setters
-	public Integer getCodigoItemPedidoPK() {
-		return codigoItemPedidoPK;
+	public int getCodigoItemPedidoPK() {
+		return this.codigoItemPedidoPK;
 	}
 	
 	public int getQuantidade() {
-		return quantidade;
+		return this.quantidade;
 	}
 	
-	public void setQuantidade(Integer quantidade) {
+	public void setQuantidade(int quantidade) {	
 		this.quantidade = quantidade;
-		
 	}
 	
 	public BigDecimal getValor() {
@@ -77,7 +81,7 @@ public class ItemPedido implements Serializable {
 	}	
 	
 	public Produto getProduto() {
-		return produto;
+		return this.produto;
 	}
 	
 	public void setProduto(Produto produto) {
@@ -85,7 +89,7 @@ public class ItemPedido implements Serializable {
 	}
 
 	public Pedido getPedido() {
-		return pedido;
+		return this.pedido;
 	}
 
 	public void setPedido(Pedido pedido) {

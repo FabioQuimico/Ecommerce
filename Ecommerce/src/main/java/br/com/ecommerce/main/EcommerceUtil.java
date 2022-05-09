@@ -141,11 +141,11 @@ public class EcommerceUtil {
 		restTemplate.put(url, requestEntity);
 	}	
 	
-	public void deleteItemDemo(long id) {
+	public void deleteItemDemo(Integer id) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		RestTemplate restTemplate = new RestTemplate();
-		String url = "http://localhost:8080/spring-app/estoque/produto/{id}";
+		String url = "http://localhost:8080/ecommerce/itemPedido/{codigoItemPedido}";
 		HttpEntity<Produto> requestEntity = new HttpEntity<Produto>(headers);
 		restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, Void.class, id);
 	}	
@@ -173,19 +173,19 @@ public class EcommerceUtil {
 		System.out.println(produto1.toString());
 		util.addProdutoDemo(produto1);
 		
-		Produto produto2 = new Produto(2, "Monitor", new BigDecimal("2899.99"), 50);
+		Produto produto2 = new Produto(2, "Monitor", new BigDecimal("3000.00"), 50);
 		System.out.println(produto2.toString());
 		util.addProdutoDemo(produto2);
 		
-		Produto produto3 = new Produto(3, "Teclado", new BigDecimal("1160.35"), 90);
+		Produto produto3 = new Produto(3, "Teclado", new BigDecimal("1200.00"), 90);
 		System.out.println(produto3.toString());
 		util.addProdutoDemo(produto3);
 		
-		Produto produto4 = new Produto(4, "Mouse", new BigDecimal("226.90"), 150);
+		Produto produto4 = new Produto(4, "Mouse", new BigDecimal("250.00"), 150);
 		System.out.println(produto4.toString());
 		util.addProdutoDemo(produto4);
 		
-		Produto produto5 = new Produto(5, "Phone", new BigDecimal("575.49"), 125);
+		Produto produto5 = new Produto(5, "Phone", new BigDecimal("600.00"), 125);
 		System.out.println(produto5.toString());
 		util.addProdutoDemo(produto5);
 	
@@ -236,11 +236,26 @@ public class EcommerceUtil {
 		System.out.println(pedido1.toString());
 		
 //      Alterar o item
-		util.getItemByIdDemo(item2.getCodigoItemPedidoPK());		
-		System.out.println("Altera quantidade do item");					
-		item2.setQuantidade(1);
+		System.out.println("Altera os itens do pedido");		
+		
+		System.out.println("Altera quantidade do item");
+		util.getItemByIdDemo(2);	
+		BigDecimal novoValor = pedido1.getValor_total().subtract(item2.getProduto().getPreco());
+		pedido1.setValor_total(novoValor);
+		item2.atualizarQtdeItens(1);
 		util.updateItemDemo(item2);
-		util.getItemByIdDemo(item2.getCodigoItemPedidoPK());
+		util.getItemByIdDemo(2);
+		System.out.println(pedido1.toString());	
+				
+		System.out.println("Exclui um item");		
+		util.getAllItensDemo();
+		util.deleteItemDemo(3);
+		util.getAllItensDemo();
+		pedido1.removerItem(item3);
+		System.out.println(pedido1.toString());	
+		util.updatePedidoDemo(pedido1);	
 
 	}
+	
+	
 }

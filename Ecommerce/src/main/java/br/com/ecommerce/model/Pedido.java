@@ -107,6 +107,11 @@ public class Pedido implements Serializable {
 		this.valor_total = this.valor_total.add(item.getValor().multiply(quantidade));
 	}
 	
+	public void removerItem(ItemPedido item) {
+		this.valor_total = this.valor_total.subtract(item.getValor());
+		this.itemPedidos.remove(item);
+	}
+	
 	public Set<ItemPedido> getItemPedidos() {
 		return Collections.unmodifiableSet(this.itemPedidos);
 	}

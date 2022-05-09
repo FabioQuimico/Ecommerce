@@ -20,7 +20,7 @@ public class PedidoService implements IPedidoService{
 	private PedidoRepository pedidoRepository;
 
 	@Override
-	@Cacheable(value = "allPedidosCache", unless = "#result.size() == 0")
+//	@Cacheable(value = "allPedidosCache", unless = "#result.size() == 0")
 	public List<Pedido> getAllPedidos() {
 		System.out.println("getAllPedidos()");
 		List<Pedido> listaPedido = new ArrayList<>();
@@ -29,7 +29,7 @@ public class PedidoService implements IPedidoService{
 	}
 
 	@Override
-	@Cacheable(value = "pedidoCache", key = "#codigo")
+//	@Cacheable(value = "pedidoCache", key = "#codigo")
 	public Pedido getPedidoByCodigo(Integer codigo) {
 		System.out.println("getPedidoByCodigo()");
 		return pedidoRepository.findById(codigo).get();
@@ -52,12 +52,12 @@ public class PedidoService implements IPedidoService{
 	}
 
 	@Override
-	@Caching(
-		evict = { 
-			@CacheEvict(value = "allPedidosCache", allEntries = true), 
-			@CacheEvict(value = "pedidoCache", key = "#codigo")
-		}
-	)
+//	@Caching(
+//		evict = { 
+//			@CacheEvict(value = "allPedidosCache", allEntries = true), 
+//			@CacheEvict(value = "pedidoCache", key = "#codigo")
+//		}
+//	)
 	public void deletePedido(Integer codigo) {
 		System.out.println("deletePedido()");
 		Pedido pedido = pedidoRepository.findById(codigo).get();
